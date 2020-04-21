@@ -1,8 +1,10 @@
 #https://www.youtube.com/watch?v=FfWpgLFMI7w
+import sys
 import pygame
 import random
 import math 
 from pygame import mixer
+import ship
 
 # Initialize the pygame
 pygame.init()
@@ -106,6 +108,9 @@ running = True
 #screen.blit(background,(0, 0))
 # Define a clock to set limit the fps
 clock = pygame.time.Clock()
+
+enemy = ship.EnemyShip('enemy.png', 400,100,4,1,1)
+
 while running:
   #screen.fill((150,170,190)) 
   screen.blit(background,(0, 0)) #Need fix to speed up
@@ -137,44 +142,20 @@ while running:
        # print("Keystoke has been released")
         playerX_change = 0
  
-    
+
+  enemy.update(screen)
+
   # Checking boundaries of spaceship so it doesn't go out of bounds
   playerX += playerX_change
   if playerX <=0: playerX =0
   if playerX >=736: playerX =736
   
-  # Enemy movement
-  for i in range(num_of_enemies):
   
-    # Game Over
-    if enemyY[i] > 440:
-      for j in range(num_of_enemies):
-        enemyY[j] = 2000
-      game_over_text()
-      running = False
-      break
-      
-    enemyX[i] += enemyX_change[i]
-    if enemyX[i] <=0: 
-      enemyX_change[i] = 4
-      enemyY[i] += enemyY_change[i]
-    elif enemyX[i] >=736: 
-      enemyX_change[i] = -4
-      enemyY[i] += enemyY_change[i]
-    #Collision
-    collision = isCollision(enemyX[i], enemyY[i], bulletX, bulletY)
-    if collision:
-      bulletY = 480
-      bullet_state = 'ready'
-      score_value += 1
-      enemyX[i] = random.randint(0,735)
-      enemyY[i] = random.randint(50,150)
-      explosion_sound = mixer.Sound('explosion.wav')
-      explosion_sound.set_volume(0.05)
-      explosion_sound.play()
-      
-    enemy(enemyX[i], enemyY[i])
+  
 
+      
+    
+      
   #bullet movement
   if bulletY <=0:
     bulletY = playerY - 20
@@ -187,5 +168,10 @@ while running:
 
   
   pygame.display.update() # Updates the display on the srcreen
+
   clock.tick(60)
+  # print(clock.get_fps())
+  # print()
+  
+  
   
